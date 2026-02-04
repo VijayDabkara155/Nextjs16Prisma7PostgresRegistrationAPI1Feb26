@@ -1,147 +1,78 @@
-import React from "react";
+"use client"
+import axios from 'axios';
+import { send } from 'process';
+import React, { useState } from 'react'
+import Swal from 'sweetalert2';
 
-const App: React.FC = () => {
-  return (
-    <div style={styles.page}>
-      {/* Header */}
-      <header style={styles.header}>
-        <h1 style={styles.logo}>Platform Bootstrap</h1>
-        <span style={styles.badge}>DevOps / Platform Engineering</span>
-      </header>
+export default function page() {
+  //1. Hooks area
+  const [fname,setFname] = useState("");
+  const [lname,setLname] = useState("");
+  const [email,setEmail] = useState("");
+  const [pass,setPass] = useState("");
+  const [cpass,setCpass] = useState("");
+  const [role_type,setRoleType] = useState(""); // This is react hook which is used to manage state in functional component
+  //2. Function defination area
 
-      {/* Hero Section */}
-      <section style={styles.hero}>
-        <h2 style={styles.title}>
-          One Server. One Script. Everything Ready.
-        </h2>
-        <p style={styles.subtitle}>
-          Kubernetes • Rancher • Jira • Confluence • PostgreSQL
-        </p>
+  let payload = {
+    "fname":fname,
+    "lname":lname,
+    "username":email,
+    "pass":pass,
+    "cpass":cpass,
+    "role_type": role_type
+  }
+  
+  console.log("Payload Data: ", payload);
+  try {
+    //Block of code to try
+    // we have call to the API
+    axios.post('http://localhost:3000/api/v1/register', payload)
+    .then(function (response) {
+      console.log(response);
+      Swal.fire({
+        title: "User Registered Successfully!",
+        text: "User has been registered successfully.",
+        icon: "success"
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "User Not Registered",
+        text: "User Not Registered",
+        footer: '<a href="#">Why do I have this issue?</a>'
+      });
+    });
+  } catch(err) {
+    //Block of code to handle errors
+    console.log("Error: ", err);
+  }
 
-        <div style={styles.actions}>
-          <button style={styles.primaryBtn}>Get Started</button>
-          <button style={styles.secondaryBtn}>View Documentation</button>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section style={styles.features}>
-        {features.map((f) => (
-          <div key={f.title} style={styles.card}>
-            <h3>{f.title}</h3>
-            <p>{f.desc}</p>
-          </div>
-        ))}
-      </section>
-
-      {/* Footer */}
-      <footer style={styles.footer}>
-        <p>© {new Date().getFullYear()} Platform Engineering</p>
-        <p>Built by Vijay</p>
-      </footer>
-    </div>
-  );
-};
-
-export default App;
-
-/* -------------------- DATA -------------------- */
-
-const features = [
-  {
-    title: "Automated Infrastructure",
-    desc: "Provision Kubernetes, Rancher, Jira, and PostgreSQL with a single command.",
-  },
-  {
-    title: "Production Ready",
-    desc: "Designed with reproducibility, scalability, and DevOps best practices.",
-  },
-  {
-    title: "Self-Hosted Platform",
-    desc: "Full control over your infrastructure on a single or multi-node setup.",
-  },
-];
-
-/* -------------------- STYLES -------------------- */
-
-const styles: { [key: string]: React.CSSProperties } = {
-  page: {
-    minHeight: "100vh",
-    backgroundColor: "#0f172a",
-    color: "#e5e7eb",
-    fontFamily: "Inter, sans-serif",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "20px 40px",
-    borderBottom: "1px solid #1e293b",
-  },
-  logo: {
-    fontSize: "20px",
-    fontWeight: 700,
-  },
-  badge: {
-    fontSize: "12px",
-    padding: "6px 10px",
-    backgroundColor: "#1e293b",
-    borderRadius: "999px",
-  },
-  hero: {
-    textAlign: "center",
-    padding: "80px 20px",
-  },
-  title: {
-    fontSize: "42px",
-    fontWeight: 800,
-    marginBottom: "16px",
-  },
-  subtitle: {
-    fontSize: "18px",
-    color: "#94a3b8",
-    marginBottom: "32px",
-  },
-  actions: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "16px",
-  },
-  primaryBtn: {
-    padding: "12px 24px",
-    backgroundColor: "#2563eb",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
-  secondaryBtn: {
-    padding: "12px 24px",
-    backgroundColor: "transparent",
-    color: "#e5e7eb",
-    border: "1px solid #334155",
-    borderRadius: "8px",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
-  features: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
-    padding: "40px",
-  },
-  card: {
-    backgroundColor: "#020617",
-    border: "1px solid #1e293b",
-    borderRadius: "12px",
-    padding: "24px",
-  },
-  footer: {
-    textAlign: "center",
-    padding: "20px",
-    borderTop: "1px solid #1e293b",
-    fontSize: "14px",
-    color: "#94a3b8",
-  },
-};
+  //3. Return area
+  return ( // This is function which has a return statement
+    <> {/*This is empty tag*/} 
+      <form className="mt-5 w-50 offset-1"> {/*this is react form tag*/}
+        <input type="text" name="fname" value={fname} onChange={ (e) => setFname(e.target.value) } className="form-control mb-1" placeholder="Enter your name"/> {/*this is input tag which is self closing tag*/}
+        <input type="text" name="lname" value={lname} onChange={ (e) => setLname(e.target.value) } className="form-control mb-1" placeholder="Enter your surname"/> {/*this is input tag which is self closing tag*/}
+        <input type="email" name="email" value={email} onChange={ (e) => setEmail(e.target.value) } className="form-control mb-1" placeholder="Enter your email"/> {/*this is input tag which is self closing tag*/}
+        <input type="password" name="pass" value={pass} onChange={ (e) => setPass(e.target.value) } className="form-control mb-1" placeholder="Enter your password"/> {/*this is input tag which is self closing tag*/}
+        <input type="password" name="confirm_pass" value={cpass} onChange={ (e) => setCpass(e.target.value) } className="form-control mb-1" placeholder="Confirm your password"/> {/*this is input tag which is self closing tag*/}
+        <select className="form-control mb-1" name="role_type" value={role_type} onChange={(e) => setRoleType(e.target.value)}> {/*this is select tag*/}
+          <option value="">Select Role</option>
+          <option value="exporter">Exporter</option>
+          <option value="importer_exporter">Importr & Exporter</option>
+          <option value="customer_care">Customer Care</option>   
+        </select>
+        <button
+          type="submit"
+          onClick={send}
+          className="btn btn-success mt-3"
+        >
+          Sign Up
+        </button>
+      </form>
+    </>
+  )
+}

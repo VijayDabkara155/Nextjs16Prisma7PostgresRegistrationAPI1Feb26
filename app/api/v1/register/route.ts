@@ -22,7 +22,7 @@ export async function POST(request : Request) {
                     }
                 });
                 if (existing_user) {
-                    return Response.json({data});
+                    return Response.json({"msg": "User already exists"} , {status: 409});
                 }
                 // Generating hash of the password
                 const saltRounds = 10;
